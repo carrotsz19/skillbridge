@@ -254,7 +254,8 @@ textarea{min-height:110px;resize:vertical}
   <div class="field"><label class="l" for="ap">Password</label><input type="password" id="ap" autocomplete="new-password"><div class="err" id="apE"></div></div>
   <button class="btn block" id="authGo">Create account</button>
   <p style="text-align:center;margin-top:12px;font-size:14px"><span id="authAsk">Already have an account?</span> <button class="linkish" id="authSwitch">Log in</button></p>
-  <p class="note" style="margin:8px 0 0;text-align:center">Prototype: accounts stay in this browser only.</p>
+  <button class="btn ghost block" data-demo style="margin-top:16px">Try the demo account</button>
+  <p class="note" style="margin:8px 0 0;text-align:center">Demo login: demo@skillbridge.test / demo1234<br>Prototype: accounts stay in this browser only.</p>
 </dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -300,13 +301,14 @@ function openSheet(m){
  if(m)bk.mentor=m;renderBook();go("book");
 }
 document.addEventListener("click",e=>{
- const t=e.target.closest("[data-go],[data-book],[data-fav],[data-plan],[data-mentor],[data-close],[data-auth],[data-logout]");if(!t)return;
+ const t=e.target.closest("[data-go],[data-book],[data-fav],[data-plan],[data-mentor],[data-close],[data-auth],[data-logout],[data-demo]");if(!t)return;
  if(t.hasAttribute("data-close")){t.closest("dialog").close();return}
  if(t.dataset.go){go(t.dataset.go,t.dataset.scroll)}
  else if(t.dataset.book!==undefined){openSheet(t.dataset.book)}
  else if(t.dataset.fav){const k=t.dataset.fav;favs.has(k)?favs.delete(k):favs.add(k);save();render()}
  else if(t.dataset.auth){openAuth(t.dataset.auth,'')}
  else if(t.dataset.logout!==undefined){logout()}
+ else if(t.dataset.demo!==undefined){demo()}
  else if(t.dataset.mentor){openProfile(t.dataset.mentor)}
  else if(t.dataset.plan==="Premium"){if(plan==="Premium")toast("You are already on Premium.");else openPlan("Unlimited booking requests, priority workshop access and advanced AI workshops.")}
  else if(t.dataset.plan){plan="Free";save();refreshPlan();toast("You are on the Free plan.")}
@@ -347,9 +349,18 @@ async function hash(s){try{const b=await crypto.subtle.digest('SHA-256',new Text
 function save(){if(!me)return;const a=LS.get('sb_acc')||{};a[me.email]={name:me.name,hash:me.hash,plan,reqs,favs:[...favs],bookings};LS.set('sb_acc',a)}
 function login(email,r){me={name:r.name,email,hash:r.hash};plan=r.plan||'Free';reqs=r.reqs||0;favs=new Set(r.favs||[]);bookings=r.bookings||[];LS.set('sb_me',email);render();refreshPlan();renderTimes()}
 function logout(){me=null;plan='Free';reqs=0;favs=new Set();bookings=[];LS.set('sb_me',null);render();refreshPlan();renderTimes();toast('You are logged out.')}
+const DEMO={email:'demo@skillbridge.test',pass:'demo1234',name:'Demo Student'};
+async function demo(){
+ const acc=LS.get('sb_acc')||{};
+ if(!acc[DEMO.email])acc[DEMO.email]={name:DEMO.name,hash:await hash(DEMO.email+':'+DEMO.pass),plan:'Free',reqs:0,favs:['Marcus Tan','AI Fundamentals Workshop'],bookings:[]};
+ LS.set('sb_acc',acc);document.querySelectorAll('dialog[open]').forEach(d=>d.close());
+ login(DEMO.email,acc[DEMO.email]);toast('Signed in to the demo account.');
+}
+async function seedDemo(){const acc=LS.get('sb_acc')||{};if(!acc[DEMO.email]){acc[DEMO.email]={name:DEMO.name,hash:await hash(DEMO.email+':'+DEMO.pass),plan:'Free',reqs:0,favs:['Marcus Tan','AI Fundamentals Workshop'],bookings:[]};LS.set('sb_acc',acc)}}
+seedDemo();
 function restore(){const em=LS.get('sb_me'),r=em&&(LS.get('sb_acc')||{})[em];if(r)login(em,r)}
 function renderAccount(){
- $('#acctBox').innerHTML=me?`<div class="row"><span class="avatar">${esc(me.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase())}</span><div class="grow"><h3>${esc(me.name)}</h3><div class="meta">${esc(me.email)} · ${plan} plan</div></div><button class="btn ghost" data-logout>Log out</button></div>`:`<div class="empty">Create an account to book sessions, buy a plan and keep your favorites.<p style="margin-top:12px"><button class="btn" data-auth="up">Create account</button> <button class="btn ghost" data-auth="in">Log in</button></p></div>`;
+ $('#acctBox').innerHTML=me?`<div class="row"><span class="avatar">${esc(me.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase())}</span><div class="grow"><h3>${esc(me.name)}</h3><div class="meta">${esc(me.email)} · ${plan} plan</div></div><button class="btn ghost" data-logout>Log out</button></div>`:`<div class="empty">Create an account to book sessions, buy a plan and keep your favorites.<p style="margin-top:12px"><button class="btn" data-auth="up">Create account</button> <button class="btn ghost" data-auth="in">Log in</button></p><p style="margin-top:8px"><button class="linkish" data-demo style="min-height:44px">Try the demo account</button></p></div>`;
  $('#bkRows').innerHTML=bookings.length?bookings.map(b=>`<div class="row"><div class="grow"><h3>${b.mentor}</h3><div class="meta">${b.day}, ${b.time} · ${b.len}</div><p>${b.loc}</p></div><span class="tag">Requested</span></div>`).join(''):`<div class="empty">No bookings yet. Pick a mentor and a time in Book.</div>`;
  $('#reqNow').textContent=bookings.length?bookings.length+(bookings.length===1?' request sent':' requests sent'):'None yet';
 }
