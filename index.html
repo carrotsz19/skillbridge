@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SkillBridge</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F2F4F6;--surface:#fff;--ink:#15202B;--muted:#5A6877;--line:#D8DEE4;--accent:#1C4FD7;--on-accent:#fff;--soft:#E6ECFB;--warn:#B3261E;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F151B;--surface:#172029;--ink:#EAF0F5;--muted:#9AA8B6;--line:#2A3642;--accent:#7E9FFF;--on-accent:#0B1220;--soft:#1C2A45;--warn:#FF8A80;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F151B;--surface:#172029;--ink:#EAF0F5;--muted:#9AA8B6;--line:#2A3642;--accent:#7E9FFF;--on-accent:#0B1220;--soft:#1C2A45;--warn:#FF8A80;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Archivo,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.app{max-width:560px;margin:0 auto;padding:0 16px 96px}
+header.top{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+.brand{font-weight:800;font-size:20px;letter-spacing:-.02em}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.icon-btn{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center}
+.icon-btn svg,.nav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.icon-btn[aria-pressed="true"] svg{fill:var(--accent);stroke:var(--accent)}
+h1,h2,h3{margin:0;letter-spacing:-.025em;line-height:1.08}
+h1{font-size:44px;font-weight:800}
+h2{font-size:22px;font-weight:800}
+h3{font-size:17px;font-weight:700;letter-spacing:-.01em}
+p{margin:0}.muted{color:var(--muted)}
+.view{display:none}.view.on{display:block}
+.hero{padding:8px 0 24px}
+.hero p{margin:14px 0 18px;max-width:34ch;font-size:17px}
+.bridge{display:block;width:100%;height:36px;margin:0 0 12px;color:var(--accent)}
+.btn{min-height:48px;padding:0 20px;border-radius:12px;border:1px solid var(--accent);background:var(--accent);color:var(--on-accent);font-weight:700}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.block{width:100%}
+section{margin-top:28px}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.sec-head small{color:var(--muted);font-size:13px}
+.paths{display:grid;gap:10px}
+.path{display:flex;gap:14px;align-items:center;text-align:left;width:100%;padding:14px;border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+.avatar{flex:none;width:52px;height:52px;border-radius:14px;background:var(--soft);color:var(--accent);display:grid;place-items:center;font-weight:800;font-size:18px}
+.path b{display:block;font-size:16px}.path span{font-size:14px;color:var(--muted)}
+.rows{border:1px solid var(--line);border-radius:18px;background:var(--surface);overflow:hidden}
+.row{display:flex;gap:12px;padding:14px;border-top:1px solid var(--line);align-items:flex-start}
+.row:first-child{border-top:0}
+.row .grow{flex:1;min-width:0}
+.row .meta{font-size:13px;color:var(--muted);margin-top:2px}
+.row p{font-size:14px;margin-top:6px}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--soft);color:var(--accent)}
+.where{border-radius:18px;border:1px solid var(--line);background:var(--surface);padding:16px}
+.where dl{margin:12px 0 0;display:grid;gap:10px}
+.where dt{font-weight:700;font-size:15px}.where dd{margin:0;font-size:14px;color:var(--muted)}
+.plans{display:grid;gap:10px}
+.plan{border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:16px}
+.plan.pro{border:2px solid var(--accent)}
+.price{font-size:32px;font-weight:800;letter-spacing:-.03em;margin:6px 0 10px}
+.price small{font-size:14px;font-weight:500;color:var(--muted);letter-spacing:0}
+.plan ul{margin:0 0 14px;padding-left:18px;font-size:14px}
+.plan li{margin:3px 0}
+.empty{padding:22px 16px;text-align:center;color:var(--muted);font-size:14px}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:20;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}
+.nav ul{list-style:none;margin:0 auto;padding:0;max-width:560px;display:grid;grid-template-columns:repeat(5,1fr)}
+.nav button{width:100%;min-height:52px;border:0;background:none;display:grid;justify-items:center;gap:2px;font-size:11.5px;font-weight:500;color:var(--muted);border-radius:12px}
+.nav button[aria-current="page"]{color:var(--accent);font-weight:700}
+dialog{width:min(560px,100%);max-width:100%;margin:auto auto 0;border:0;border-radius:22px 22px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px));background:var(--surface);color:var(--ink)}
+dialog::backdrop{background:rgba(5,10,15,.55)}
+.sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+fieldset{border:0;padding:0;margin:0 0 16px}
+legend,label.l{font-weight:700;font-size:14px;margin-bottom:8px;display:block;padding:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips label{min-height:44px;display:inline-flex;align-items:center;padding:0 14px;border:1px solid var(--line);border-radius:10px;font-size:14px;cursor:pointer;background:var(--bg)}
+.chips input:checked+label{border-color:var(--accent);background:var(--soft);color:var(--accent);font-weight:700}
+.chips input:focus-visible+label{outline:3px solid var(--accent);outline-offset:2px}
+.note{font-size:13px;color:var(--muted);margin:-6px 0 16px}
+input[type=text],input[type=email],input[type=password],textarea{width:100%;min-height:48px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+textarea{min-height:110px;resize:vertical}
+.field{margin-bottom:14px}.err{color:var(--warn);font-size:13px;margin-top:4px;min-height:0}
+.toast{position:fixed;left:16px;right:16px;bottom:calc(76px + env(safe-area-inset-bottom,0px));max-width:528px;margin:0 auto;background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:12px;font-size:14px;z-index:40;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+.linkish{background:none;border:0;padding:0;font:inherit;font-weight:700;letter-spacing:-.01em;text-align:left;color:var(--ink);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px}
+.upsell{display:flex;gap:10px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;background:var(--surface);padding:10px 12px;font-size:14px}
+.upsell[hidden]{display:none}
+.upsell .acts{display:flex;gap:6px;flex:none}
+.upsell .btn{min-height:44px;padding:0 14px;font-size:14px}
+.upsell .linkish{min-height:44px;padding:0 8px;font-weight:500;color:var(--muted);text-decoration:none}
+.plan.pro{background:var(--soft)}
+.nav button{white-space:nowrap}
+.btn:disabled{opacity:.55;cursor:default}
+.icon-btn{flex:none}
+.row .btn{min-height:44px;padding:0 16px}
+.plan .tag{margin-bottom:6px}
+.profile-top{display:flex;gap:14px;align-items:center;margin-bottom:14px}
+.profile-top .avatar{width:64px;height:64px;font-size:22px}
+.help{margin:8px 0 16px;padding-left:18px;font-size:15px}.help li{margin:4px 0}
+.facts{border:1px solid var(--line);border-radius:12px;padding:4px 12px;margin-bottom:16px}
+.facts div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+.facts div:first-child{border-top:0}.facts dt{color:var(--muted)}.facts dd{margin:0;text-align:right;font-weight:500}
+.two{display:grid;gap:8px}
+.lhs{display:flex;align-items:center;gap:10px}
+.back{display:flex;align-items:center;gap:2px;min-height:44px;padding:0 14px 0 8px;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-weight:700;font-size:15px}
+.back[hidden]{display:none}
+.back svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mcard{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:10px;margin:-6px 0 16px}
+.mcard .avatar{width:44px;height:44px;font-size:15px}.mcard .grow{flex:1;min-width:0}.mcard .meta{font-size:13px;color:var(--muted)}.mcard .btn{min-height:44px;padding:0 14px;font-size:14px}
+.chips input:disabled+label{opacity:.45;text-decoration:line-through;cursor:not-allowed}
+.chips input:disabled:checked+label{background:var(--bg);border-color:var(--line);color:inherit}
+.proto{font-size:12px;color:var(--muted);margin-top:28px;text-align:center}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+@media (min-width:700px){h1{font-size:56px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="lhs"><button class="back" id="backBtn" hidden aria-label="Go back"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>Back</button><span class="brand">SkillBridge</span></div>
+  <button class="icon-btn" id="favBtn" aria-label="Favorites" data-go="menu"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+</header>
+
+<main>
+<div class="view on" id="v-home">
+  <div class="hero">
+    <svg class="bridge" viewBox="0 0 320 36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 30h316M40 30V8M280 30V8M40 8Q160 38 280 8M80 30v-9M120 30v-5M160 30v-6M200 30v-5M240 30v-9"/></svg>
+    <h1>Ask someone who's done it.</h1>
+    <p>Twenty minutes with a working mentor on AI tools or workplace confidence, at a BizCampus corner near your lectures.</p>
+    <button class="btn" data-book="">Book a mentor session</button>
+  </div>
+
+  <div class="upsell" id="upsell"><span id="upsellText">Free plan: 1 booking request left this month.</span><span class="acts"><button class="btn" data-plan="Premium">See Premium</button><button class="linkish" id="hideUpsell" aria-label="Hide this message">Hide</button></span></div>
+
+  <section aria-labelledby="h-find">
+    <div class="sec-head"><h2 id="h-find">Find a mentor</h2></div>
+    <div class="paths">
+      <button class="path" data-mentor="Marcus Tan"><span class="avatar">MT</span><span><b>Ask questions about AI</b><span>Marcus Tan, AI &amp; Technology Mentor</span></span></button>
+      <button class="path" data-mentor="Sarah Lim"><span class="avatar">SL</span><span><b>Ask questions about soft skills</b><span>Sarah Lim, Soft Skills Coach</span></span></button>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-where">
+    <div class="sec-head"><h2 id="h-where">Where you can meet</h2></div>
+    <div class="where">
+      <p>The two spots open on alternate days, so pick a day first and you'll see which one is open. Sessions run in 20 or 30 minute slots.</p>
+      <dl>
+        <div><dt>BizCampus Mentorship Corner</dt><dd>A seating corner inside BizCampus outlets at local universities.</dd></div>
+        <div><dt>Singapore Polytechnic pop-up</dt><dd>A BizCampus pop-up booth during lunch hours and career weeks.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-mentors">
+    <div class="sec-head"><h2 id="h-mentors">Featured mentors</h2></div>
+    <div class="rows" id="mentorRows"></div>
+  </section>
+
+  <section aria-labelledby="h-groups">
+    <div class="sec-head"><h2 id="h-groups">Group sessions</h2><small>Learn new skills and connect</small></div>
+    <div class="rows" id="eventRows"></div>
+  </section>
+
+  <section aria-labelledby="h-plan">
+    <div class="sec-head"><h2 id="h-plan">Choose your plan</h2></div>
+    <div class="plans">
+      <div class="plan">
+        <h3>Free</h3><div class="price">$0<small>/month</small></div>
+        <ul><li>Browse all mentor profiles</li><li>Selected group workshops</li><li>AI fundamentals</li><li>1 mentor booking request per month</li></ul>
+        <button class="btn ghost block" data-plan="Free">Choose free plan</button>
+      </div>
+      <div class="plan pro">
+        <span class="tag">Best for regular mentoring</span><h3>Premium</h3><div class="price">$5<small>/month</small></div>
+        <ul><li>Unlimited mentor booking requests</li><li>Priority access to group workshops</li><li>Advanced AI workshops</li><li>More networking opportunities</li></ul>
+        <button class="btn block" id="premBtn" data-plan="Premium">Start Premium for $5/month</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="view" id="v-book">
+  <section><div class="sec-head"><h2>Book a mentor</h2><small id="bkQuota"></small></div>
+  <fieldset><legend>Mentor</legend><div class="chips" id="bMentor"></div></fieldset>
+  <div class="mcard" id="bCard"></div>
+  <fieldset><legend>Day</legend><div class="chips" id="bDay"></div></fieldset>
+  <fieldset><legend>Location</legend><div class="chips" id="bLoc"></div></fieldset>
+  <p class="note">Campuses take turns: each one is open every other day.</p>
+  <fieldset><legend>Length</legend><div class="chips" id="bLen"></div></fieldset>
+  <fieldset><legend>Time</legend><div class="chips" id="bTime"></div></fieldset>
+  <p class="note">Seating at BizCampus is held for your slot only. Please order a drink or snack at the counter to use it.</p>
+  <button class="btn block" id="bConfirm">Send booking request</button></section>
+</div>
+
+<div class="view" id="v-calendar">
+  <section><div class="sec-head"><h2>Calendar</h2><small>November – December 2026</small></div>
+  <div class="rows" id="calRows"></div></section>
+</div>
+
+<div class="view" id="v-about">
+  <section><h2>About SkillBridge</h2>
+  <p style="margin-top:12px">SkillBridge connects polytechnic and university students with working mentors. You can get quick answers on AI and career skills in one short chat, or join a group workshop and meet others.</p>
+  <p style="margin-top:12px" class="muted">Mentor chats happen at BizCampus Mentorship Corners in university outlets and at BizCampus pop-ups on the Singapore Polytechnic campus, so you do not need to travel far between classes.</p></section>
+</div>
+
+<div class="view" id="v-contact">
+  <section><h2>Contact us</h2>
+  <p class="muted" style="margin:8px 0 18px">Ask about bookings, plans or becoming a mentor.</p>
+  <div id="contactForm" novalidate>
+    <div class="field"><label class="l" for="cn">Name</label><input type="text" id="cn" autocomplete="name"><div class="err" id="cnE"></div></div>
+    <div class="field"><label class="l" for="ce">Email</label><input type="email" id="ce" autocomplete="email"><div class="err" id="ceE"></div></div>
+    <div class="field"><label class="l" for="cm">Message</label><textarea id="cm"></textarea><div class="err" id="cmE"></div></div>
+    <button class="btn block" id="sendMsg">Send message</button>
+  </div></section>
+</div>
+
+<div class="view" id="v-menu">
+  <section><div class="sec-head"><h2>Account</h2></div><div class="rows" id="acctBox"></div></section>
+  <section><div class="sec-head"><h2>My bookings</h2></div><div class="rows" id="bkRows"></div></section>
+  <section><div class="sec-head"><h2>Favorites</h2></div>
+  <div class="rows" id="favRows"></div></section>
+  <section><div class="sec-head"><h2>Plan</h2></div>
+  <div class="rows">
+    <div class="row"><div class="grow"><h3>Current plan</h3><div class="meta" id="planNow">Free</div></div><button class="btn ghost" data-go="home" data-scroll="h-plan">Change</button></div>
+    <div class="row"><div class="grow"><h3>Booking requests</h3><div class="meta" id="reqNow">None yet</div></div></div>
+    <div class="row"><div class="grow"><h3>About SkillBridge</h3><div class="meta">How mentoring works and where to meet</div></div><button class="btn ghost" data-go="about">Read</button></div>
+  </div></section>
+</div>
+</main>
+<p class="proto">Prototype. Bookings, plans and messages are not saved.</p>
+</div>
+
+<nav class="nav" aria-label="Main">
+<ul>
+  <li><button data-go="home" aria-current="page"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg>Home</button></li>
+  <li><button data-go="calendar"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Calendar</button></li>
+  <li><button data-go="book"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>Book</button></li>
+  <li><button data-go="contact"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 8l9 6 9-6"/></svg>Contact</button></li>
+  <li><button data-go="menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menu</button></li>
+</ul>
+</nav>
+
+<dialog id="profile" aria-labelledby="pName">
+  <div class="sheet-head"><h2 id="pHead">Mentor profile</h2><button class="icon-btn" data-close aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div id="pBody"></div>
+</dialog>
+<dialog id="planSheet" aria-labelledby="planTitle">
+  <div class="sheet-head"><h2 id="planTitle">SkillBridge Premium</h2><button class="icon-btn" data-close aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <p id="planWhy" class="muted" style="margin-bottom:12px"></p>
+  <div class="price" style="margin-top:0">$5<small>/month</small></div>
+  <ul class="help"><li>Unlimited mentor booking requests</li><li>Priority access to group workshops</li><li>Advanced AI workshops</li><li>More networking opportunities</li></ul>
+  <div class="two"><button class="btn block" id="buyPrem">Start Premium for $5/month</button><button class="btn ghost block" data-close>Not now</button></div>
+  <p class="note" style="margin:12px 0 0">Prototype: no payment is taken.</p>
+</dialog>
+<dialog id="authSheet" aria-labelledby="authTitle">
+  <div class="sheet-head"><h2 id="authTitle">Create account</h2><button class="icon-btn" data-close aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <p id="authWhy" class="muted" style="margin-bottom:12px"></p>
+  <div class="field" id="anWrap"><label class="l" for="an">Name</label><input type="text" id="an" autocomplete="name"><div class="err" id="anE"></div></div>
+  <div class="field"><label class="l" for="ae">Email</label><input type="email" id="ae" autocomplete="email"><div class="err" id="aeE"></div></div>
+  <div class="field"><label class="l" for="ap">Password</label><input type="password" id="ap" autocomplete="new-password"><div class="err" id="apE"></div></div>
+  <button class="btn block" id="authGo">Create account</button>
+  <p style="text-align:center;margin-top:12px;font-size:14px"><span id="authAsk">Already have an account?</span> <button class="linkish" id="authSwitch">Log in</button></p>
+  <p class="note" style="margin:8px 0 0;text-align:center">Prototype: accounts stay in this browser only.</p>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const mentors=[
+ {id:"Marcus Tan",ini:"MT",role:"AI & Technology Mentor",date:"18 Nov 2026",tag:"AI"},
+ {id:"Sarah Lim",ini:"SL",role:"Soft Skills Coach",date:"18 Nov 2026",tag:"Soft skills",blurb:"Helps students and fresh graduates build workplace confidence and interpersonal skills."}
+];
+mentors[0].blurb="Guides students through AI tools and how to stay relevant as the field changes.";
+mentors[0].about="Marcus mentors students who are new to AI and technology. Sessions are practical: bring a question, a project idea or a tool you are stuck on.";
+mentors[0].help=["Using AI tools for study and work","Deciding what to learn first","Feedback on a project idea","Staying relevant as AI changes"];
+mentors[1].about="Sarah helps students and fresh graduates build workplace confidence and interpersonal skills, from the first handshake to the follow-up message.";
+mentors[1].help=["Introducing yourself to professionals","Speaking up in a team","Preparing for a first interview","Approaching people at networking events"];
+const events=[
+ {id:"AI Fundamentals Workshop",when:"30 Nov, 5:00 PM – 7:00 PM",where:"500 Dover Rd, Queenstown",blurb:"An introduction to how AI developed, which tools are useful, and the skills that keep you relevant."},
+ {id:"Confidence and Networking Workshop",when:"1 Dec, 5:00 PM – 7:00 PM",where:"500 Dover Rd, Queenstown",blurb:"Practise professional introductions, approach industry professionals, and grow your career network."}
+];
+const locs=["BizCampus Mentorship Corner (university)","SP campus pop-up"];
+let favs=new Set(),reqs=0,plan="Free",hideNudge=false,bookings=[],cur='home',trail=[];
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const bm=(k)=>`<button class="icon-btn" data-fav="${k}" aria-pressed="${favs.has(k)}" aria-label="Bookmark ${k}"><svg viewBox="0 0 24 24"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button>`;
+const mRow=m=>`<div class="row"><span class="avatar">${m.ini}</span><div class="grow"><h3><button class="linkish" data-mentor="${m.id}">${m.id}</button></h3><div class="meta">${m.role} · ${m.date}</div><p>${m.blurb}</p><p style="margin-top:10px"><button class="btn ghost" data-mentor="${m.id}">View profile</button> <button class="btn" data-book="${m.id}">Book</button></p></div>${bm(m.id)}</div>`;
+const eRow=e=>`<div class="row"><div class="grow"><span class="tag">Group</span><h3 style="margin-top:6px">${e.id}</h3><div class="meta">${e.when} · ${e.where}</div><p>${e.blurb}</p></div>${bm(e.id)}</div>`;
+function render(){
+ $("#mentorRows").innerHTML=mentors.map(mRow).join("");
+ $("#eventRows").innerHTML=events.map(eRow).join("");
+ $("#calRows").innerHTML=events.map(eRow).join("");
+ const f=[...mentors.filter(m=>favs.has(m.id)).map(mRow),...events.filter(e=>favs.has(e.id)).map(eRow)];
+ $("#favRows").innerHTML=f.length?f.join(""):`<div class="empty">Nothing saved yet. Tap the bookmark on a mentor or workshop to keep it here.</div>`;
+ $("#favBtn").setAttribute("aria-label",`Favorites (${favs.size})`);
+}
+function go(v,scrollId,isBack){
+ if(!isBack&&v!==cur)trail.push(cur);cur=v;$('#backBtn').hidden=v==='home';
+ $$(".view").forEach(x=>x.classList.toggle("on",x.id==="v-"+v));
+ $$(".nav button").forEach(b=>{if(b.dataset.go===v)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
+ if(location.hash!=="#"+v)history.replaceState(null,"","#"+v);
+ scrollId?document.getElementById(scrollId).scrollIntoView():window.scrollTo(0,0);
+}
+let toastT;function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove("show"),2800)}
+function chips(el,name,items,sel){el.innerHTML=items.map((t,i)=>`<input type="radio" name="${name}" id="${name}${i}" value="${t}" ${t===sel?"checked":""}><label for="${name}${i}">${t}</label>`).join("")}
+function openSheet(m){
+ document.querySelectorAll("dialog[open]").forEach(d=>d.close());
+ if(m)bk.mentor=m;renderBook();go("book");
+}
+document.addEventListener("click",e=>{
+ const t=e.target.closest("[data-go],[data-book],[data-fav],[data-plan],[data-mentor],[data-close],[data-auth],[data-logout]");if(!t)return;
+ if(t.hasAttribute("data-close")){t.closest("dialog").close();return}
+ if(t.dataset.go){go(t.dataset.go,t.dataset.scroll)}
+ else if(t.dataset.book!==undefined){openSheet(t.dataset.book)}
+ else if(t.dataset.fav){const k=t.dataset.fav;favs.has(k)?favs.delete(k):favs.add(k);save();render()}
+ else if(t.dataset.auth){openAuth(t.dataset.auth,'')}
+ else if(t.dataset.logout!==undefined){logout()}
+ else if(t.dataset.mentor){openProfile(t.dataset.mentor)}
+ else if(t.dataset.plan==="Premium"){if(plan==="Premium")toast("You are already on Premium.");else openPlan("Unlimited booking requests, priority workshop access and advanced AI workshops.")}
+ else if(t.dataset.plan){plan="Free";save();refreshPlan();toast("You are on the Free plan.")}
+});
+$$("dialog").forEach(d=>d.addEventListener("click",e=>{if(e.target===d)d.close()}));
+$("#hideUpsell").onclick=()=>{hideNudge=true;refreshPlan()};
+$("#buyPrem").onclick=()=>{if(!me){openAuth('up','Create an account to start Premium. Your plan stays with your account.');return}plan="Premium";save();$("#planSheet").close();refreshPlan();toast("Premium is on. Booking requests are now unlimited.")};
+$("#sendMsg").onclick=()=>{
+ const f=[["cn","Enter your name."],["ce","Enter an email address, such as name@example.com."],["cm","Write a short message."]];let ok=true;
+ f.forEach(([id,msg])=>{const el=$("#"+id),v=el.value.trim();const bad=!v||(id==="ce"&&!/^\S+@\S+\.\S+$/.test(v));$("#"+id+"E").textContent=bad?msg:"";el.setAttribute("aria-invalid",bad);if(bad)ok=false});
+ if(ok){["cn","ce","cm"].forEach(id=>$("#"+id).value="");toast("Message sent. We reply within two working days.")}
+};
+function openProfile(id){
+ const m=mentors.find(x=>x.id===id),first=id.split(" ")[0];
+ document.querySelectorAll("dialog[open]").forEach(d=>d.close());
+ $("#pBody").innerHTML=`<div class="profile-top"><span class="avatar">${m.ini}</span><div><h3 id="pName" style="font-size:22px">${m.id}</h3><div class="meta muted">${m.role}</div></div></div>
+ <h3>About ${first}</h3><p style="margin:6px 0 16px">${m.about}</p>
+ <h3>${first} can help with</h3><ul class="help">${m.help.map(h=>`<li>${h}</li>`).join("")}</ul>
+ <dl class="facts"><div><dt>Session length</dt><dd>20 or 30 minutes</dd></div><div><dt>Where</dt><dd>BizCampus Mentorship Corner or SP pop-up</dd></div><div><dt>Free plan</dt><dd>1 request per month</dd></div><div><dt>Premium</dt><dd>Unlimited requests</dd></div></dl>
+ <div class="two"><button class="btn block" data-book="${m.id}">Book ${first}</button><button class="btn ghost block" data-fav="${m.id}" id="pFav">${favs.has(m.id)?"Saved to favorites":"Save to favorites"}</button></div>`;
+ $("#profile").showModal();
+ $("#pFav").addEventListener("click",()=>setTimeout(()=>{$("#pFav").textContent=favs.has(m.id)?"Saved to favorites":"Save to favorites"},0));
+}
+function openPlan(why){
+ document.querySelectorAll("dialog[open]").forEach(d=>d.close());
+ $("#planWhy").textContent=why;$("#planSheet").showModal();
+}
+function refreshPlan(){
+ $("#planNow").textContent=plan;
+ const u=$("#upsell");u.hidden=plan==="Premium"||(hideNudge&&reqs<1);
+ $("#upsellText").textContent=reqs>=1?"You have used your free request this month.":"Free plan: 1 booking request left this month.";
+ const b=$("#premBtn");b.textContent=plan==="Premium"?"Your current plan":"Start Premium for $5/month";b.disabled=plan==="Premium";renderAccount();
+}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let me=null,authMode='up';
+const LS={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+async function hash(s){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(unescape(encodeURIComponent(s)))}}
+function save(){if(!me)return;const a=LS.get('sb_acc')||{};a[me.email]={name:me.name,hash:me.hash,plan,reqs,favs:[...favs],bookings};LS.set('sb_acc',a)}
+function login(email,r){me={name:r.name,email,hash:r.hash};plan=r.plan||'Free';reqs=r.reqs||0;favs=new Set(r.favs||[]);bookings=r.bookings||[];LS.set('sb_me',email);render();refreshPlan();renderTimes()}
+function logout(){me=null;plan='Free';reqs=0;favs=new Set();bookings=[];LS.set('sb_me',null);render();refreshPlan();renderTimes();toast('You are logged out.')}
+function restore(){const em=LS.get('sb_me'),r=em&&(LS.get('sb_acc')||{})[em];if(r)login(em,r)}
+function renderAccount(){
+ $('#acctBox').innerHTML=me?`<div class="row"><span class="avatar">${esc(me.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase())}</span><div class="grow"><h3>${esc(me.name)}</h3><div class="meta">${esc(me.email)} · ${plan} plan</div></div><button class="btn ghost" data-logout>Log out</button></div>`:`<div class="empty">Create an account to book sessions, buy a plan and keep your favorites.<p style="margin-top:12px"><button class="btn" data-auth="up">Create account</button> <button class="btn ghost" data-auth="in">Log in</button></p></div>`;
+ $('#bkRows').innerHTML=bookings.length?bookings.map(b=>`<div class="row"><div class="grow"><h3>${b.mentor}</h3><div class="meta">${b.day}, ${b.time} · ${b.len}</div><p>${b.loc}</p></div><span class="tag">Requested</span></div>`).join(''):`<div class="empty">No bookings yet. Pick a mentor and a time in Book.</div>`;
+ $('#reqNow').textContent=bookings.length?bookings.length+(bookings.length===1?' request sent':' requests sent'):'None yet';
+}
+function openAuth(mode,why){
+ document.querySelectorAll('dialog[open]').forEach(d=>d.close());
+ authMode=mode;const up=mode==='up';
+ $('#authTitle').textContent=up?'Create account':'Log in';$('#anWrap').hidden=!up;$('#authGo').textContent=up?'Create account':'Log in';
+ $('#authAsk').textContent=up?'Already have an account?':'New here?';$('#authSwitch').textContent=up?'Log in':'Create account';
+ $('#ap').autocomplete=up?'new-password':'current-password';$('#authWhy').textContent=why||'';
+ ['anE','aeE','apE'].forEach(i=>$('#'+i).textContent='');$('#authSheet').showModal();
+}
+$('#authSwitch').onclick=()=>openAuth(authMode==='up'?'in':'up',$('#authWhy').textContent);
+$('#authGo').onclick=async()=>{
+ const up=authMode==='up',n=$('#an').value.trim(),e=$('#ae').value.trim().toLowerCase(),p=$('#ap').value;
+ const bad={an:up&&!n?'Enter your name.':'',ae:!/^\S+@\S+\.\S+$/.test(e)?'Enter an email address, such as name@example.com.':'',ap:p.length<8?'Use at least 8 characters.':''};
+ for(const k in bad)$('#'+k+'E').textContent=bad[k];
+ if(bad.an||bad.ae||bad.ap)return;
+ const acc=LS.get('sb_acc')||{},h=await hash(e+':'+p);
+ if(up){
+  if(acc[e]){$('#aeE').textContent='An account with this email already exists. Log in instead.';return}
+  acc[e]={name:n,hash:h,plan:'Free',reqs:0,favs:[...favs],bookings:[]};LS.set('sb_acc',acc);login(e,acc[e]);toast('Account created. Welcome, '+n.split(' ')[0]+'.');
+ }else{
+  if(!acc[e]||acc[e].hash!==h){$('#apE').textContent='Email or password is incorrect.';return}
+  login(e,acc[e]);toast('Welcome back, '+acc[e].name.split(' ')[0]+'.');
+ }
+ $('#authSheet').close();$('#ap').value='';
+};
+const days=['Mon 23 Nov','Tue 24 Nov','Wed 25 Nov','Thu 26 Nov'];
+const campusFor=d=>locs[days.indexOf(d)%2];
+let bk={mentor:'Marcus Tan',loc:locs[0],len:'20 min',day:days[0],time:null};
+function renderLoc(){const open=campusFor(bk.day);bk.loc=open;
+ $('#bLoc').innerHTML=locs.map((t,i)=>{const off=t!==open;return `<input type="radio" name="bl" id="bl${i}" value="${t}" ${off?'disabled':''} ${t===open?'checked':''}><label for="bl${i}">${t}${off?' · closed this day':''}</label>`}).join('')}
+const fmt=t=>{const h=Math.floor(t/60),m=t%60;return `${(h+11)%12+1}:${String(m).padStart(2,'0')} ${h<12?'AM':'PM'}`};
+function renderBook(){
+ chips($('#bMentor'),'bm',mentors.map(x=>x.id),bk.mentor);renderLoc();
+ chips($('#bLen'),'bn',['20 min','30 min'],bk.len);chips($('#bDay'),'bd',days,bk.day);renderCard();renderTimes();
+}
+function renderCard(){const m=mentors.find(x=>x.id===bk.mentor);$('#bCard').innerHTML=`<span class="avatar">${m.ini}</span><div class="grow"><b>${m.id}</b><div class="meta">${m.role}</div></div><button class="btn ghost" data-mentor="${m.id}">View profile</button>`}
+$('#backBtn').onclick=()=>go(trail.pop()||'home',null,true);
+function renderTimes(){
+ const L=parseInt(bk.len),list=[];[[720,840],[900,1020]].forEach(([a,b])=>{for(let t=a;t+L<=b;t+=L)list.push(t)});
+ $('#bTime').innerHTML=list.map((t,i)=>{const lab=fmt(t);
+  const busy=(i+days.indexOf(bk.day)+(bk.mentor==='Sarah Lim'?1:0))%4===0||bookings.some(b=>b.mentor===bk.mentor&&b.day===bk.day&&b.time===lab);
+  return `<input type="radio" name="bt" id="bt${i}" value="${lab}" ${busy?'disabled':''} ${bk.time===lab?'checked':''}><label for="bt${i}">${lab}</label>`}).join('');
+ $('#bkQuota').textContent=plan==='Premium'?'Unlimited requests':(reqs>=1?'Free request used':'1 free request left');
+}
+$('#v-book').addEventListener('change',e=>{const k={bm:'mentor',bl:'loc',bn:'len',bd:'day',bt:'time'}[e.target.name];if(!k)return;bk[k]=e.target.value;if(k!=='time'){bk.time=null;renderTimes()}if(k==='mentor')renderCard();if(k==='day')renderLoc();});
+$('#bConfirm').onclick=()=>{
+ if(!me){openAuth('in','Log in or create an account to book a session.');return}
+ if(!bk.time){toast('Pick a time slot first.');return}
+ if(plan==='Free'&&reqs>=1){openPlan('You have used your 1 free booking request this month. Premium removes that limit.');return}
+ const b={mentor:bk.mentor,loc:bk.loc,len:bk.len,day:bk.day,time:bk.time};
+ bookings.push(b);reqs++;bk.time=null;save();renderTimes();refreshPlan();toast(`Request sent to ${b.mentor} for ${b.day}, ${b.time}.`);
+};
+const views=["home","book","calendar","about","contact","menu"];
+addEventListener("hashchange",()=>{const v=location.hash.slice(1);if(views.includes(v))go(v)});
+restore();render();refreshPlan();renderBook();const h=location.hash.slice(1);if(views.includes(h))go(h);
+</script>
+</body>
+</html>
